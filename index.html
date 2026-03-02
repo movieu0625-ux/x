@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Print Shop</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+  <script>
+    // Set your hosted backend URL here (e.g., 'https://your-app.onrender.com')
+    window.API_BASE = ''; 
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    #otp-section {
+      border: 1px solid black;
+      margin: 10px;
+      padding: 10px;
+    }
+
+    #file-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    #file-list li {
+      margin: 5px;
+      border: 1px solid gray;
+      padding: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    button {
+      margin: 10px;
+    }
+
+    #preview {
+      margin: 20px;
+      border: 1px dashed gray;
+      padding: 10px;
+    }
+
+    /* Verification Styles */
+    #verification-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      background: #f4f4f9;
+      padding: 2rem;
+      border-radius: 12px;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: #3b82f6;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 1rem auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .otp-display {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #1e3a8a;
+      letter-spacing: 4px;
+      margin: 1rem 0;
+    }
+
+    .success-icon {
+      font-size: 3rem;
+      color: #10b981;
+    }
+
+    .error-text {
+      color: #ef4444;
+    }
+
+    .btn-home {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main-ui">
+    <div id="otp-section" style="display: none;">
+      <h1>OTP</h1>
+      <p id="otp-value"></p>
+    </div>
+    <h2>Select Documents</h2>
+    <input type="file" id="documents" multiple accept=".pdf,.jpg,.jpeg,.png">
+    <ul id="file-list"></ul>
+
+    <label>Number of Copies (1-50):</label>
+    <input type="number" id="copies" min="1" max="50" value="1"><br>
+
+    <label>Page Selection:</label>
+    <input type="radio" name="pageSelection" value="all" checked> All Pages
+    <input type="radio" name="pageSelection" value="custom"> Custom
+    <input type="text" id="custom-pages" placeholder="e.g., 1-3,5" disabled><br>
+
+    <label>Color Mode:</label>
+    <input type="radio" name="colorMode" value="bw" checked> Black & White (₹1/page)
+    <input type="radio" name="colorMode" value="color"> Color (₹3/page)<br>
+
+    <label>Paper Size: A4 (fixed)</label><br>
+
+    <label>Orientation:</label>
+    <input type="radio" name="orientation" value="portrait" checked> Portrait
+    <input type="radio" name="orientation" value="landscape"> Landscape<br>
+
+    <label>Pages per Sheet:</label>
+    <input type="radio" name="pagesPerSheet" value="1" checked> 1
+    <input type="radio" name="pagesPerSheet" value="2"> 2<br>
+
+    <div id="preview"></div>
+
+    <button id="calculate">Calculate Preview</button>
+    <button id="pay-now">Pay Now</button>
+    <button id="pay-later">Pay Later</button>
+    <button id="cancel">Cancel</button>
+  </div>
+
+  <div id="verification-section">
+    <div class="card" id="status-card">
+      <h2>Verifying Payment</h2>
+      <div class="spinner"></div>
+      <p>Please wait while we confirm your transaction...</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
